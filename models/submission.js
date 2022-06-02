@@ -1,8 +1,6 @@
-const { DataTypes } = require('sequelize')
+const DataTypes = require('sequelize')
 
 const sequelize = require('../lib/sequelize')
-const { Course } = require('./course')
-const { Assignment } = require('./assignment')
 const { User } = require('./user')
 
 const Submission = sequelize.define('submission', {
@@ -10,11 +8,7 @@ const Submission = sequelize.define('submission', {
   studentId: { type: DataTypes.INTEGER, allowNull: false },
   grade: { type: DataTypes.FLOAT, allowNull: false },
   file: { type: DataTypes.STRING, allowNull: false },
-  timestamp: { 
-		type: DataTypes.DATE, 
-		allowNull: false,
-		defaultValue: Sequelize.NOW
-	}
+  timestamp: { type: DataTypes.DATE, allowNull: false, defaultValue: Date.now() }
 })
 
 /*

@@ -1,9 +1,7 @@
-const { DataTypes } = require('sequelize')
+const DataTypes = require('sequelize')
 
 const sequelize = require('../lib/sequelize')
-const { Course } = require('./course')
 const { Submission } = require('./submission')
-const { User } = require('./user')
 
 const Assignment = sequelize.define('assignment', {
   courseId: { type: DataTypes.INTEGER, allowNull: false },

@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize')
+const DataTypes = require('sequelize')
 
 const sequelize = require('../lib/sequelize')
 const { Assignment } = require('./assignment')
@@ -23,8 +23,6 @@ Assignment.belongsTo(Course)
 */
 Course.belongsTo(User)
 User.hasMany(Course, { foreignKey: { allowNull: false } })
-
-
 
 exports.Course = Course
 
