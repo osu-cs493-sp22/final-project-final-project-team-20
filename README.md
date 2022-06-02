@@ -1,2 +1,6 @@
-# final-project-final-project-team-20
-final-project-final-project-team-20 created by GitHub Classroom
+# CS 493 Final Project for Team 20 
+## Team Members:
+Pablo Moreno
+Jacob Hershberger
+Orel Yehuda
+Lucas Borry
