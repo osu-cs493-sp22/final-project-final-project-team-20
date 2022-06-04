@@ -1,0 +1,72 @@
+[
+	{
+		"assignmentId": "1",
+		"studentId": "5",
+		"grade": "0",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-19T06:24:00.000Z"
+	},
+	{
+		"assignmentId": "1",
+		"studentId": "5",
+		"grade": "99.4",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-20T05:59:00.000Z"
+	},
+	{
+		"assignmentId": "1",
+		"studentId": "6",
+		"grade": "75.34",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-16T00:23:00.000Z"
+	},
+	{
+		"assignmentId": "1",
+		"studentId": "7",
+		"grade": "100",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-17T02:27:00.000Z"
+	},
+	{
+		"assignmentId": "2",
+		"studentId": "9",
+		"grade": "67",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-05-02T06:58:00.000Z"
+	},
+	{
+		"assignmentId": "2",
+		"studentId": "7",
+		"grade": "93",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-05-02T06:58:00.000Z"
+	},
+	{
+		"assignmentId": "3",
+		"studentId": "11",
+		"grade": "88",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-05-15T06:59:00.000Z"
+	},
+	{
+		"assignmentId": "5",
+		"studentId": "14",
+		"grade": "50",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-07T014:54:00.000Z"
+	},
+	{
+		"assignmentId": "5",
+		"studentId": "7",
+		"grade": "87",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-08T06:59:00.000Z"
+	},
+	{
+		"assignmentId": "6",
+		"studentId": "16",
+		"grade": "99",
+		"file": "submissions/1/STUDENTID+SUBMISSIONINDEX",
+		"timestamp": "2022-04-15T06:59:00.000Z"
+	}
+]
