@@ -1,0 +1,56 @@
+[
+	{
+		"courseId": "1",
+		"title": "Assignment 1: API design and server setup",
+		"points": "100",
+		"due": "2022-04-19T06:59:00.000Z"
+	},
+	{
+		"courseId": "1",
+		"title": "Assignment 2: API date storage",
+		"points": "90",
+		"due": "2022-05-02T06:59:00.000Z"
+	},
+	{
+		"courseId": "1",
+		"title": "Assignment 3: API authentication and authorization",
+		"points": "110",
+		"due": "2022-05-16T06:59:00.000Z"
+	},
+	{
+		"courseId": "1",
+		"title": "Assignment 4: File uploads and offline work",
+		"points": "100",
+		"due": "2022-05-31T06:59:00.000Z"
+	},
+	{
+		"courseId": "4",
+		"title": "Identification Quiz",
+		"points": "3",
+		"due": "2022-04-08T06:59:00.000Z"
+	},
+	{
+		"courseId": "4",
+		"title": "Archery Form Discussion",
+		"points": "3",
+		"due": "2022-04-15T06:59:00.000Z"
+	},
+	{
+		"courseId": "6",
+		"title": "Lab1: Ancient Observatories",
+		"points": "20",
+		"due": "2024-1-15T06:59:00.000Z"
+	},
+	{
+		"courseId": "7",
+		"title": "Assignment 1",
+		"points": "100",
+		"due": "2023-8-13T06:59:00.000Z"
+	},
+	{
+		"courseId": "7",
+		"title": "Assignment 2",
+		"points": "100",
+		"due": "2023-8-20T06:59:00.000Z"
+	}
+]

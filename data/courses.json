@@ -1,0 +1,72 @@
+[
+	{
+		"instructorId" : "2",
+		"subject" : "CS",
+		"number" : "493",
+		"title" : "Cloud Application Development",
+		"term" : "sp22"
+	},
+	{
+		"instructorId" : "2",
+		"subject" : "CS",
+		"number" : "312",
+		"title" : "System Administration",
+		"term" : "sp22"
+	},
+	{
+		"instructorId" : "4",
+		"subject" : "BI",
+		"number" : "101",
+		"title" : "Environmental Biology: Ecology, Conservation, Global Change",
+		"term" : "fa23"
+	},
+	{
+		"instructorId" : "3",
+		"subject" : "PAC",
+		"number" : "104",
+		"title" : "Archery",
+		"term" : "wi24"
+	},
+	{
+		"instructorId" : "3",
+		"subject" : "PAC",
+		"number" : "121",
+		"title" : "Billiards",
+		"term" : "su23"
+	},
+	{
+		"instructorId" : "4",
+		"subject" : "PH",
+		"number" : "104",
+		"title" : "Descriptive Astronomy",
+		"term" : "wi24"
+	},
+	{
+		"instructorId" : "2",
+		"subject" : "CS",
+		"number" : "161",
+		"title" : "Introduction To Computer Science I",
+		"term" : "fa24"
+	},
+	{
+		"instructorId" : "3",
+		"subject" : "HHS",
+		"number" : "231",
+		"title" : "LIFETIME FITNESS FOR HEALTH",
+		"term" : "sp22"
+	},
+	{
+		"instructorId" : "4",
+		"subject" : "PH",
+		"number" : "201",
+		"title" : "General Physics",
+		"term" : "fa23"
+	},
+	{
+		"instructorId" : "3",
+		"subject" : "PAC",
+		"number" : "314",
+		"title" : "ALI: Bouldering",
+		"term" : "fa25"
+	}
+]
