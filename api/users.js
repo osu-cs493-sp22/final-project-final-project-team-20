@@ -42,7 +42,7 @@ router.post('/login', async function (req, res, next){
 	
 	try {
 		if(req.body && req.body.userId && req.body.password){
-			const user = await User.findByPk(req.body.userId)
+ 			const user = await User.findByPk(req.body.userId)
 			const authenticated = user && await bcrypt.compare(
 				req.body.password, 
 				user.password
