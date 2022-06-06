@@ -1,14 +1,27 @@
 const DataTypes = require('sequelize')
+const moment = require('moment')
 
 const sequelize = require('../lib/sequelize')
 const { User } = require('./user')
 
 const Submission = sequelize.define('submission', {
-  assignmentId: { type: DataTypes.INTEGER, allowNull: false },
-  studentId: { type: DataTypes.INTEGER, allowNull: false },
-  grade: { type: DataTypes.FLOAT, allowNull: false },
-  file: { type: DataTypes.STRING, allowNull: false },
-  timestamp: { type: DataTypes.STRING, allowNull: false, defaultValue: sequelize.literal('NOW()').toString() }
+	assignmentId: { type: DataTypes.INTEGER, allowNull: false },
+	studentId: { type: DataTypes.INTEGER, allowNull: false },
+	grade: { type: DataTypes.FLOAT, allowNull: false },
+	file: { type: DataTypes.STRING, allowNull: false },
+	timestamp: { 
+		type: DataTypes.DATE, 
+		allowNull: false, 
+		defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
+		set(value){
+				this.setDataValue('timestamp', moment(value).format('YYYY-MM-DD HH:mm:ss'))
+        },
+		get(){
+			const rawValue = moment(this.getDataValue('timestamp')).defaultFormat;
+			console.log("====RETURNTIMESTAMP: ", rawValue)
+			return rawValue;
+		}
+  }
 })
 
 /*

@@ -26,8 +26,7 @@
 	{
 		"courseId": "4",
 		"title": "Identification Quiz",
-		"points": "3",
-		"due": "2022-04-08T06:59:00.000Z"
+		"points": "3"
 	},
 	{
 		"courseId": "4",
@@ -39,18 +38,18 @@
 		"courseId": "6",
 		"title": "Lab1: Ancient Observatories",
 		"points": "20",
-		"due": "2024-1-15T06:59:00.000Z"
+		"due": "2024-01-15T06:59:00.000Z"
 	},
 	{
 		"courseId": "7",
 		"title": "Assignment 1",
 		"points": "100",
-		"due": "2023-8-13T06:59:00.000Z"
+		"due": "2023-08-13T06:59:00.000Z"
 	},
 	{
 		"courseId": "7",
 		"title": "Assignment 2",
 		"points": "100",
-		"due": "2023-8-20T06:59:00.000Z"
+		"due": "2023-08-20T06:59:00.000Z"
 	}
 ]

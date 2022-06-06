@@ -1,13 +1,33 @@
 const DataTypes = require('sequelize')
+const moment = require('moment')
 
 const sequelize = require('../lib/sequelize')
 const { Submission } = require('./submission')
 
 const Assignment = sequelize.define('assignment', {
-  courseId: { type: DataTypes.INTEGER, allowNull: false },
-  title: { type: DataTypes.TEXT, allowNull: false },
-  points: { type: DataTypes.INTEGER, allowNull: false },
-  due: { type: DataTypes.STRING, allowNull: true }
+	courseId: { type: DataTypes.INTEGER, allowNull: false },
+	title: { type: DataTypes.TEXT, allowNull: false },
+	points: { type: DataTypes.INTEGER, allowNull: false },
+	due: { 
+		type: DataTypes.DATE, 
+		allowNull: true,
+		defaultValue: null,
+		set(value){
+			if(value == null)
+				return null;
+			else
+				this.setDataValue('due', moment(value).format('YYYY-MM-DD HH:mm:ss'))
+        },
+		get(){
+			if(this.getDataValue('due') != null){
+				const rawValue = moment(this.getDataValue('due')).defaultFormat;
+				console.log("====RETURNTIMESTAMP: ", rawValue)
+				return rawValue;
+			}
+			else
+				return null;
+		}
+	}
 })
 
 /*

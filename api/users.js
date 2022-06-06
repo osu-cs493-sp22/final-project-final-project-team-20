@@ -41,19 +41,26 @@ router.post('/', optionalAuthentication, async function (req,res, next){
 router.post('/login', async function (req, res, next){
 	
 	try {
-		if(req.body && req.body.userId && req.body.password){
- 			const user = await User.findByPk(req.body.userId)
-			const authenticated = user && await bcrypt.compare(
-				req.body.password, 
-				user.password
-			)
-			if (authenticated) {
-				const token = generateAuthToken(req.body.userId)
-				res.status(200).send({ token: token })
-			} else {
-				res.status(401).send({
+		if(req.body && req.body.email && req.body.password){
+			const user = await User.findOne({where: {email: req.body.email}})
+			if(user){
+				const authenticated = user && await bcrypt.compare(
+					req.body.password, 
+					user.password
+				)
+				if (authenticated) {
+					const token = generateAuthToken(req.body.email)
+					res.status(200).send({ token: token })
+				} else {
+					res.status(401).send({
+					error: "Invalid credentials"
+					})
+				}
+			}
+			else{
+				res.status(401).json({
 				error: "Invalid credentials"
-				})
+			})
 			}
 		}
 		else{
@@ -72,16 +79,16 @@ router.post('/login', async function (req, res, next){
 })
 
 //Show user NO PASSWORD
-router.get('/:userId', requireAuthentication, async function (req, res, next) {
-	const user = await User.findByPk(req.user)
-	if(req.user !== req.params.userId && !user.admin){
+router.get('/:email', requireAuthentication, async function (req, res, next) {
+	const user = await User.findOne({where: {email: req.user}})
+	if(req.user !== req.params.email && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
 	}else{
-		const userId = req.params.userId
-		const user = await User.findByPk(req.params.userId, {
-			attributes: ['id', 'name', 'email', 'admin']	
+		const email = req.params.email
+		const user = await User.findOne( {where: {email: req.params.email},
+			attributes: ['id', 'name', 'email', 'role']	
 		})
 		res.status(200).json({
 			users: user

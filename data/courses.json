@@ -1,7 +1,7 @@
 [
 	{
 		"instructorId" : "2",
-		"subject" : "CS",
+		"subject" : "cs",
 		"number" : "493",
 		"title" : "Cloud Application Development",
 		"term" : "sp22"
