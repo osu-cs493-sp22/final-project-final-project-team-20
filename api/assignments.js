@@ -2,9 +2,7 @@ const { Router } = require('express')
 const { ValidationError } = require('sequelize')
 const { requireAuthentication } = require('../lib/auth')
 const { Assignment, AssignmentClientFields } = require('../models/assignment')
-const { Submission } = require('../models/submission')
 const { User } = require('../models/user')
-const { Course } = require('../models/course')
 
 const router = Router()
 
@@ -21,7 +19,7 @@ router.get('/', async function (req, res) {
   const numPerPage = 10
   const offset = (page - 1) * numPerPage
 
-  const result = await Course.findAndCountAll({
+  const result = await Assignment.findAndCountAll({
     limit: numPerPage,
     offset: offset
   })
@@ -32,19 +30,19 @@ router.get('/', async function (req, res) {
   const lastPage = Math.ceil(result.count / numPerPage)
   const links = {}
   if (page < lastPage) {
-    links.nextPage = `/courses?page=${page + 1}`
-    links.lastPage = `/courses?page=${lastPage}`
+    links.nextPage = `/assignments?page=${page + 1}`
+    links.lastPage = `/assignments?page=${lastPage}`
   }
   if (page > 1) {
-    links.prevPage = `/courses?page=${page - 1}`
-    links.firstPage = '/courses?page=1'
+    links.prevPage = `/assignments?page=${page - 1}`
+    links.firstPage = '/assignments?page=1'
   }
 
   /*
    * Construct and send response.
    */
   res.status(200).json({
-    courses: result.rows,
+    assignments: result.rows,
     pageNumber: page,
     totalPages: lastPage,
     pageSize: numPerPage,
@@ -64,8 +62,8 @@ router.post('/', requireAuthentication, async function (req, res, next) {
         })
 	}else{
 	  try {
-		const course = await Course.create(req.body, BusinessClientFields)
-		res.status(201).send({ id: course.id })
+		const assignment = await Assignment.create(req.body, AssignmentClientFields)
+		res.status(201).send({ id: assignment.id })
 	  } catch (e) {
 		if (e instanceof ValidationError) {
 		  res.status(400).send({ error: e.message })
@@ -79,13 +77,11 @@ router.post('/', requireAuthentication, async function (req, res, next) {
 /*
  * Route to fetch info about a specific course.
  */
-router.get('/:businessId', async function (req, res, next) {
-  const businessId = req.params.businessId
-  const course = await Course.findByPk(businessId, {
-    include: [ Photo, Review ]
-  })
-  if (course) {
-    res.status(200).send(course)
+router.get('/:assignmentId', async function (req, res, next) {
+  const assignmentId = req.params.assignmentId
+  const assignment = await Assignment.findByPk(assignmentId)
+  if (assignment) {
+    res.status(200).send(assignment)
   } else {
     next()
   }
@@ -94,17 +90,17 @@ router.get('/:businessId', async function (req, res, next) {
 /*
  * Route to update data for a course.
  */
-router.put('/:businessId', requireAuthentication,  async function (req, res, next) {
+router.put('/:assignmentId', requireAuthentication,  async function (req, res, next) {
 	const user = await User.findByPk(req.user)
-	if(req.user !== req.params.userId && !user.admin){
+	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
 	}else{
-	  const businessId = req.params.businessId
-	  const result = await Course.update(req.body, {
-		where: { id: businessId },
-		fields: BusinessClientFields
+	  const assignmentId = req.params.assignmentId
+	  const result = await Assignment.update(req.body, {
+		where: { id: assignmentId },
+		fields: AssignmentClientFields
 	  })
 	  if (result[0] > 0) {
 		res.status(204).send()
@@ -117,15 +113,15 @@ router.put('/:businessId', requireAuthentication,  async function (req, res, nex
 /*
  * Route to delete a course.
  */
-router.delete('/:businessId', requireAuthentication, async function (req, res, next) {
+router.delete('/:assignmentId', requireAuthentication, async function (req, res, next) {
 	const user = await User.findByPk(req.user)
-	if(req.user !== req.params.userId && !user.admin){
+	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
 	}else{
-	  const businessId = req.params.businessId
-	  const result = await Course.destroy({ where: { id: businessId }})
+	  const assignmentId = req.params.assignmentId
+	  const result = await Assignment.destroy({ where: { id: assignmentId }})
 	  if (result > 0) {
 		res.status(204).send()
 	  } else {

@@ -8,16 +8,12 @@ const User = sequelize.define('user', {
     email: { type: DataTypes.TEXT, allowNull: false },
     password:{ 
         type: DataTypes.TEXT, 
-		type: DataTypes.TEXT, 
-        type: DataTypes.TEXT, 
         allowNull: false,
         set(value){
             this.setDataValue('password', bcrypt.hashSync(value, 8))
         }
     },
     role:{ 
-        type: DataTypes.STRING, 
-		type: DataTypes.STRING, 
         type: DataTypes.STRING, 
         allowNull: false,
         defaultValue: 'student'
