@@ -155,7 +155,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"1\",\r\n    \"password\": \"hunter2\"\r\n}",
+							"raw": "{\r\n    \"email\": \"nick@block15.com\",\r\n    \"password\": \"hunter2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
