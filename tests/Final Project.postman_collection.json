@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "22274525-3d4b-40ed-8862-d510d7710f80",
+		"_postman_id": "c7f04b23-8234-46b3-83e1-d666a5689cd5",
 		"name": "Final Project",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20573984"
@@ -176,6 +176,61 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Student\",\r\n    \"email\": \"test@student.com\",\r\n    \"password\": \"hunter2\",\r\n\t\"role\": \"student\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/users/:email",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "tori@robnetts.com"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -185,7 +240,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjU0NTUyOTE1LCJleHAiOjE2NTQ2MzkzMTV9.5hZ_tsXuv83W7jLpC1ML-82l7_ed_UCGvHLM37Puo3I",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaWNrQGJsb2NrMTUuY29tIiwiaWF0IjoxNjU0NTYyOTk2LCJleHAiOjE2NTQ2NDkzOTZ9.nYaJs2ZzYJYxzlv8lddaa9K40PzX81h_ViGlh2CHLgg",
 				"type": "string"
 			}
 		]
