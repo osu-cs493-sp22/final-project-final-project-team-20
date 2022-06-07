@@ -2,6 +2,7 @@ const { Router } = require('express')
 const { ValidationError } = require('sequelize')
 const { requireAuthentication } = require('../lib/auth')
 const { Assignment, AssignmentClientFields } = require('../models/assignment')
+const { Submission } = require('../models/submission')
 const { User } = require('../models/user')
 
 const router = Router()
@@ -83,6 +84,26 @@ router.get('/:assignmentId', async function (req, res, next) {
   if (assignment) {
     res.status(200).send(assignment)
   } else {
+    next()
+  }
+})
+
+/*
+* Route to get submissions for a specific assignment
+*/
+router.get('/:assignmentId/submissions', async function (req, res, next) {
+  const assignmentId = req.params.assignmentId
+  const assignment = await Assignment.findByPk(assignmentId)
+  if (assignment) {
+    const submissions = await Submission.findAll({where: {assignmentId: assignmentId}})
+    if (submissions) {
+      res.status(200).send(submissions)
+    }
+    else {
+      next()
+    }
+  }
+  else {
     next()
   }
 })
