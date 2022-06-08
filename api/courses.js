@@ -132,4 +132,53 @@ router.delete('/:courseId', requireAuthentication, async function (req, res, nex
 	}
 })
 
+/*
+ * Route to fetch info about a specific course.
+ */
+router.get('/:courseId/students',requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
+  if(req.user !== req.params.userId && user.role != 'admin'){
+    res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+  }else{
+    const courseId = req.params.courseId
+    const course = await Course.findByPk(courseId)
+    if (course) {
+      const students = await Course.findAndCountAll({where: {id: courseId}})
+
+      res.status(200).send({
+        students: students
+      });  
+    } else {
+    next()
+    }
+  }
+})
+
+/*
+ * Route to fetch info about a specific course assignments.
+ */
+router.get('/:courseId/assignments',requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
+  if(req.user !== req.params.userId && user.role != 'admin'){
+    res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+  }else{
+    const courseId = req.params.courseId
+    const course = await Course.findByPk(courseId)
+    if (course) {
+      const assignments = await Assignment.findAndCountAll({where: {courseId: courseId}})
+
+      res.status(200).send({
+        assignments: assignments
+      });  
+    } else {
+    next()
+    }
+  }
+})
+
+
 module.exports = router
