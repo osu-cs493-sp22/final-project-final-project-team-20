@@ -81,9 +81,7 @@ router.post('/', requireAuthentication, async function (req, res, next) {
  */
 router.get('/:courseId', async function (req, res, next) {
   const courseId = req.params.courseId
-  const course = await Course.findByPk(courseId, {
-    include: [ Photo, Review ]
-  })
+  const course = await Course.findByPk(courseId)
   if (course) {
     res.status(200).send(course)
   } else {
@@ -104,7 +102,7 @@ router.put('/:courseId', requireAuthentication,  async function (req, res, next)
 	  const courseId = req.params.courseId
 	  const result = await Course.update(req.body, {
 		where: { id: courseId },
-		fields: BusinessClientFields
+		fields: CourseClientFields
 	  })
 	  if (result[0] > 0) {
 		res.status(204).send()
