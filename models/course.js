@@ -5,6 +5,7 @@ const { Assignment } = require('./assignment')
 const { User } = require('./user')
 
 const Course = sequelize.define('course', {
+	instructorId: { type: DataTypes.INTEGER, allowNull: false },
 	subject: { type: DataTypes.TEXT, allowNull: false, 
 		set(value){
 		this.setDataValue('subject', value.toUpperCase())
