@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c7f04b23-8234-46b3-83e1-d666a5689cd5",
+		"_postman_id": "a7cb0d5f-2fb8-4aba-9657-40d70c8daab1",
 		"name": "Final Project",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20573984"
@@ -146,6 +146,145 @@
 			]
 		},
 		{
+			"name": "Submissions",
+			"item": [
+				{
+					"name": "Get All Submissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/submissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"submissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Submission By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/submissions/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"submissions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Submission",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"assignmentId\": \"2\",\r\n    \"studentId\": \"9\",\r\n    \"grade\": \"67\",\r\n    \"file\": \"submissions/1/STUDENTID+SUBMISSIONINDEX\",\r\n    \"timestamp\": \"2022-05-02T06:58:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/submissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"submissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Submission",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"assignmentId\": \"2\",\r\n    \"studentId\": \"9\",\r\n    \"grade\": \"67\",\r\n    \"file\": \"submissions/1/STUDENTID+SUBMISSIONINDEX\",\r\n    \"timestamp\": \"2022-05-02T06:58:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/submissions/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"submissions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Submission",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/submissions/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"submissions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Users",
 			"item": [
 				{
@@ -207,7 +346,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Get User By Email",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -240,7 +379,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaWNrQGJsb2NrMTUuY29tIiwiaWF0IjoxNjU0NTYyOTk2LCJleHAiOjE2NTQ2NDkzOTZ9.nYaJs2ZzYJYxzlv8lddaa9K40PzX81h_ViGlh2CHLgg",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaWNrQGJsb2NrMTUuY29tIiwiaWF0IjoxNjU0NjUzMDE2LCJleHAiOjE2NTQ3Mzk0MTZ9.62HJ48N6ZNX1GHqsKX1WXJSVN6jcX85kR2lVqXOvnSU",
 				"type": "string"
 			}
 		]

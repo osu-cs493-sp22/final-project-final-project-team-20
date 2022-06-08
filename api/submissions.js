@@ -3,13 +3,11 @@ const { ValidationError } = require('sequelize')
 const { requireAuthentication } = require('../lib/auth')
 const { Submission, SubmissionClientFields } = require('../models/submission')
 const { User } = require('../models/user')
-const { Course } = require('../models/course')
-const { Assignment } = require('../models/assignment')
 
 const router = Router()
 
 /*
- * Route to return a list of courses.
+ * Route to return a list of submissions.
  */
 router.get('/', async function (req, res) {
   /*
@@ -21,7 +19,7 @@ router.get('/', async function (req, res) {
   const numPerPage = 10
   const offset = (page - 1) * numPerPage
 
-  const result = await Course.findAndCountAll({
+  const result = await Submission.findAndCountAll({
     limit: numPerPage,
     offset: offset
   })
@@ -32,19 +30,19 @@ router.get('/', async function (req, res) {
   const lastPage = Math.ceil(result.count / numPerPage)
   const links = {}
   if (page < lastPage) {
-    links.nextPage = `/courses?page=${page + 1}`
-    links.lastPage = `/courses?page=${lastPage}`
+    links.nextPage = `/submissions?page=${page + 1}`
+    links.lastPage = `/submissions?page=${lastPage}`
   }
   if (page > 1) {
-    links.prevPage = `/courses?page=${page - 1}`
-    links.firstPage = '/courses?page=1'
+    links.prevPage = `/submissions?page=${page - 1}`
+    links.firstPage = '/submissions?page=1'
   }
 
   /*
    * Construct and send response.
    */
   res.status(200).json({
-    courses: result.rows,
+    submissions: result.rows,
     pageNumber: page,
     totalPages: lastPage,
     pageSize: numPerPage,
@@ -57,15 +55,15 @@ router.get('/', async function (req, res) {
  * Route to create a new course.
  */
 router.post('/', requireAuthentication, async function (req, res, next) {
-	const user = await User.findByPk(req.user)
+	const user = await User.findOne({where: {email: req.user}})
 	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
 	}else{
 	  try {
-		const course = await Course.create(req.body, BusinessClientFields)
-		res.status(201).send({ id: course.id })
+		const submission = await Submission.create(req.body, SubmissionClientFields)
+		res.status(201).send({ id: submission.id })
 	  } catch (e) {
 		if (e instanceof ValidationError) {
 		  res.status(400).send({ error: e.message })
@@ -79,13 +77,11 @@ router.post('/', requireAuthentication, async function (req, res, next) {
 /*
  * Route to fetch info about a specific course.
  */
-router.get('/:businessId', async function (req, res, next) {
-  const businessId = req.params.businessId
-  const course = await Course.findByPk(businessId, {
-    include: [ Photo, Review ]
-  })
-  if (course) {
-    res.status(200).send(course)
+router.get('/:submissionId', async function (req, res, next) {
+  const submissionId = req.params.submissionId
+  const submission = await Submission.findByPk(submissionId)
+  if (submission) {
+    res.status(200).send(submission)
   } else {
     next()
   }
@@ -94,17 +90,17 @@ router.get('/:businessId', async function (req, res, next) {
 /*
  * Route to update data for a course.
  */
-router.put('/:businessId', requireAuthentication,  async function (req, res, next) {
-	const user = await User.findByPk(req.user)
-	if(req.user !== req.params.userId && !user.admin){
+router.put('/:submissionId', requireAuthentication,  async function (req, res, next) {
+	const user = await User.findOne({where: {email: req.user}})
+	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
-            err: "Unauthorized to access the specified resource"
-        })
+        err: "Unauthorized to access the specified resource"
+    })
 	}else{
-	  const businessId = req.params.businessId
-	  const result = await Course.update(req.body, {
-		where: { id: businessId },
-		fields: BusinessClientFields
+	  const submissionId = req.params.submissionId
+	  const result = await Submission.update(req.body, {
+		where: { id: submissionId },
+		fields: SubmissionClientFields
 	  })
 	  if (result[0] > 0) {
 		res.status(204).send()
@@ -117,15 +113,15 @@ router.put('/:businessId', requireAuthentication,  async function (req, res, nex
 /*
  * Route to delete a course.
  */
-router.delete('/:businessId', requireAuthentication, async function (req, res, next) {
-	const user = await User.findByPk(req.user)
-	if(req.user !== req.params.userId && !user.admin){
+router.delete('/:submissionId', requireAuthentication, async function (req, res, next) {
+	const user = await User.findOne({where: {email: req.user}})
+	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
 	}else{
-	  const businessId = req.params.businessId
-	  const result = await Course.destroy({ where: { id: businessId }})
+	  const submissionId = req.params.submissionId
+	  const result = await Submission.destroy({ where: { id: submissionId }})
 	  if (result > 0) {
 		res.status(204).send()
 	  } else {

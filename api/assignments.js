@@ -55,7 +55,7 @@ router.get('/', async function (req, res) {
  * Route to create a new course.
  */
 router.post('/', requireAuthentication, async function (req, res, next) {
-	const user = await User.findByPk(req.user)
+	const user = await User.findOne({where: {email: req.user}})
 	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
@@ -91,7 +91,7 @@ router.get('/:assignmentId', async function (req, res, next) {
  * Route to update data for a course.
  */
 router.put('/:assignmentId', requireAuthentication,  async function (req, res, next) {
-	const user = await User.findByPk(req.user)
+	const user = await User.findOne({where: {email: req.user}})
 	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
@@ -114,7 +114,7 @@ router.put('/:assignmentId', requireAuthentication,  async function (req, res, n
  * Route to delete a course.
  */
 router.delete('/:assignmentId', requireAuthentication, async function (req, res, next) {
-	const user = await User.findByPk(req.user)
+	const user = await User.findOne({where: {email: req.user}})
 	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
