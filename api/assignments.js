@@ -1,10 +1,22 @@
 const { Router } = require('express')
 const { ValidationError } = require('sequelize')
-const { requireAuthentication } = require('../lib/auth')
+const { requireAuthentication, optionalAuthentication } = require('../lib/auth')
 const { Assignment, AssignmentClientFields } = require('../models/assignment')
+const { Submission, SubmissionClientFields } = require('../models/submission')
 const { User } = require('../models/user')
+const multer = require('multer')
+const crypto = require('crypto')
 
 const router = Router()
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: `${__dirname}/uploads`,
+    filename: (req, file, callback) => {
+      const filename = crypto.pseudoRandomBytes(16).toString('hex')
+      callback(null, `${filename}`)
+    }})
+})
 
 /*
  * Route to return a list of courses.
@@ -84,6 +96,51 @@ router.get('/:assignmentId', async function (req, res, next) {
     res.status(200).send(assignment)
   } else {
     next()
+  }
+})
+
+/*
+* Route to get submissions for a specific assignment
+*/
+router.get('/:assignmentId/submissions', optionalAuthentication, async function (req, res, next) {
+  const assignmentId = req.params.assignmentId
+  const assignment = await Assignment.findByPk(assignmentId)
+  if (assignment) {
+    const submissions = await Submission.findAll({where: {assignmentId: assignmentId}})
+    if (submissions) {
+      res.status(200).send(submissions)
+    }
+    else {
+      next()
+    }
+  }
+  else {
+    next()
+  }
+})
+
+/*
+* Route to post a submission for a specific assignment
+*/
+router.post('/:assignmentId/submissions', upload.single('file'), requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
+  const studentId = user.id
+  if(req.user !== req.params.userId && !(user.role == 'student' || user.role == 'admin')){
+		res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+	}
+  else {
+    const assignmentId = req.params.assignmentId
+    const assignment = await Assignment.findByPk(assignmentId)
+    if (assignment) {
+      const submissionId = await Submission.count() + 1
+      const submission = await Submission.create({studentId: studentId, assignmentId: assignmentId, grade: "100", file: `submissions/${assignmentId}/${studentId}+${submissionId}`, userId: studentId}, SubmissionClientFields)
+      res.status(201).send({ link: `/submissions/${submission.id}` })
+    }
+    else {
+      next()
+    }
   }
 })
 
