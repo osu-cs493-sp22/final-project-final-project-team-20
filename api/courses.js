@@ -64,7 +64,7 @@ router.post('/', requireAuthentication, async function (req, res, next) {
         })
 	}else{
 	  try {
-		const course = await Course.create(req.body, BusinessClientFields)
+		const course = await Course.create(req.body, CourseClientFields)
 		res.status(201).send({ id: course.id })
 	  } catch (e) {
 		if (e instanceof ValidationError) {
@@ -81,9 +81,7 @@ router.post('/', requireAuthentication, async function (req, res, next) {
  */
 router.get('/:courseId', async function (req, res, next) {
   const courseId = req.params.courseId
-  const course = await Course.findByPk(courseId, {
-    include: [ Photo, Review ]
-  })
+  const course = await Course.findByPk(courseId)
   if (course) {
     res.status(200).send(course)
   } else {
@@ -96,7 +94,7 @@ router.get('/:courseId', async function (req, res, next) {
  */
 router.put('/:courseId', requireAuthentication,  async function (req, res, next) {
 	const user = await User.findOne({where: {email: req.user}})
-	if(req.user !== req.params.userId && !user.admin){
+	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
@@ -104,7 +102,7 @@ router.put('/:courseId', requireAuthentication,  async function (req, res, next)
 	  const courseId = req.params.courseId
 	  const result = await Course.update(req.body, {
 		where: { id: courseId },
-		fields: BusinessClientFields
+		fields: CourseClientFields
 	  })
 	  if (result[0] > 0) {
 		res.status(204).send()
@@ -119,7 +117,7 @@ router.put('/:courseId', requireAuthentication,  async function (req, res, next)
  */
 router.delete('/:courseId', requireAuthentication, async function (req, res, next) {
 	const user = await User.findOne({where: {email: req.user}})
-	if(req.user !== req.params.userId && !user.admin){
+	if(req.user !== req.params.userId && user.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
