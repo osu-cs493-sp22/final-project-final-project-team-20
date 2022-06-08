@@ -5,7 +5,8 @@ const { Course, CourseClientFields } = require('../models/course')
 const { User } = require('../models/user')
 const { Assignment } = require('../models/assignment')
 const { Submission } = require('../models/submission')
-
+const { Sequelize } = require('../lib/sequelize')
+const op = Sequelize.Op
 const router = Router()
 
 /*
@@ -131,5 +132,58 @@ router.delete('/:courseId', requireAuthentication, async function (req, res, nex
 	  }
 	}
 })
+
+/*
+ * Route to fetch info about a specific course students.
+ */
+router.get('/:courseId/students',requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
+  if(req.user !== req.params.userId && user.role != 'admin'){
+    res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+  }else{
+    const courseId = req.params.courseId
+    const course = await Course.findByPk(courseId)
+    if (course) {
+      const assignments = await Assignment.findAll({where: {courseId: courseId}})
+      const assignmentIds = assignments.map(x => x.id) 
+      const submissions = await Submission.findAll({where: {assignmentId: { [op.in]: assignmentIds }}})
+      const studenIds = submissions.map(x => x.studentId) 
+      const students = await User.findAll({where: {id: { [op.in]: studenIds }}})
+
+      res.status(200).send({
+        students: students
+      });  
+    } else {
+    next()
+    }
+  }
+})
+
+/*
+ * Route to fetch info about a specific course assignments.
+ */
+router.get('/:courseId/assignments',requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
+  if(req.user !== req.params.userId && user.role != 'admin'){
+    res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+  }else{
+    const courseId = req.params.courseId
+    const course = await Course.findByPk(courseId)
+    if (course) {
+      const assignments = await Assignment.findAndCountAll({where: {courseId: courseId}})
+
+      res.status(200).send({
+        assignments: assignments
+      });  
+    } else {
+    next()
+    }
+  }
+})
+
 
 module.exports = router
