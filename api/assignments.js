@@ -106,13 +106,46 @@ router.get('/:assignmentId/submissions', optionalAuthentication, async function 
   const assignmentId = req.params.assignmentId
   const assignment = await Assignment.findByPk(assignmentId)
   if (assignment) {
-    const submissions = await Submission.findAll({where: {assignmentId: assignmentId}})
-    if (submissions) {
-      res.status(200).send(submissions)
+    /*
+    * Compute page number based on optional query string parameter `page`.
+    * Make sure page is within allowed bounds.
+    */
+    let page = parseInt(req.query.page) || 1
+    page = page < 1 ? 1 : page
+    const numPerPage = 10
+    const offset = (page - 1) * numPerPage
+
+    const result = await Submission.findAndCountAll({
+      where: {assignmentId: assignmentId},
+      limit: numPerPage,
+      offset: offset
+    })
+
+    /*
+    * Generate HATEOAS links for surrounding pages.
+    */
+    const lastPage = Math.ceil(result.count / numPerPage)
+    const links = {}
+    if (page < lastPage) {
+      links.nextPage = `/assignments/${assignmentId}/submissions?page=${page + 1}`
+      links.lastPage = `/assignments/${assignmentId}/submissions?page=${lastPage}`
     }
-    else {
-      next()
+    if (page > 1) {
+      links.prevPage = `/assignments/${assignmentId}/submissions?page=${page - 1}`
+      links.firstPage = `/assignments/${assignmentId}/submissions?page=1`
     }
+
+    /*
+    * Construct and send response.
+    */
+    res.status(200).json({
+      submissions: result.rows,
+      pageNumber: page,
+      totalPages: lastPage,
+      pageSize: numPerPage,
+      totalCount: result.count,
+      links: links
+    })
   }
   else {
     next()
