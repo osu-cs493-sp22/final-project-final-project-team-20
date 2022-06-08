@@ -19,14 +19,22 @@ const Course = sequelize.define('course', {
 /*
 * Set up one-to-many relationship between Course and Assignment.
 */
-Course.hasMany(Assignment, { foreignKey: { allowNull: false } })
+Course.hasMany(Assignment, { 
+	foreignKey: { allowNull: false },
+	onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+	})
 Assignment.belongsTo(Course)
 
 /*
 * Set up one-to-many relationship between Course and Instructor.
 */
 Course.belongsTo(User)
-User.hasMany(Course, { foreignKey: { allowNull: false } })
+User.hasMany(Course, { 
+	foreignKey: { name: 'instructorId', allowNull: false },
+	onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+	})
 
 exports.Course = Course
 
