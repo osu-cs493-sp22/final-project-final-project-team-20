@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { ValidationError } = require('sequelize')
-const { requireAuthentication } = require('../lib/auth')
+const { requireAuthentication, optionalAuthentication } = require('../lib/auth')
 const { Assignment, AssignmentClientFields } = require('../models/assignment')
 const { Submission, SubmissionClientFields } = require('../models/submission')
 const { User } = require('../models/user')
@@ -102,7 +102,7 @@ router.get('/:assignmentId', async function (req, res, next) {
 /*
 * Route to get submissions for a specific assignment
 */
-router.get('/:assignmentId/submissions', async function (req, res, next) {
+router.get('/:assignmentId/submissions', optionalAuthentication, async function (req, res, next) {
   const assignmentId = req.params.assignmentId
   const assignment = await Assignment.findByPk(assignmentId)
   if (assignment) {
@@ -134,8 +134,9 @@ router.post('/:assignmentId/submissions', upload.single('file'), requireAuthenti
     const assignmentId = req.params.assignmentId
     const assignment = await Assignment.findByPk(assignmentId)
     if (assignment) {
-      const submission = await Submission.create({studentId: studentId, assignmentId: assignmentId, grade: "NOT YET GRADED", file: `submissions/${assignmentId}/${studentId}+${this.id}`}, SubmissionClientFields)
-      res.status(201).send({ link: `/submissions/${submisison.id}` })
+      const submissionId = await Submission.count() + 1
+      const submission = await Submission.create({studentId: studentId, assignmentId: assignmentId, grade: "100", file: `submissions/${assignmentId}/${studentId}+${submissionId}`, userId: studentId}, SubmissionClientFields)
+      res.status(201).send({ link: `/submissions/${submission.id}` })
     }
     else {
       next()
