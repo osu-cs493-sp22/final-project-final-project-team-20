@@ -4,8 +4,19 @@ const { requireAuthentication } = require('../lib/auth')
 const { Assignment, AssignmentClientFields } = require('../models/assignment')
 const { Submission, SubmissionClientFields } = require('../models/submission')
 const { User } = require('../models/user')
+const multer = require('multer')
+const crypto = require('crypto')
 
 const router = Router()
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: `${__dirname}/uploads`,
+    filename: (req, file, callback) => {
+      const filename = crypto.pseudoRandomBytes(16).toString('hex')
+      callback(null, `${filename}`)
+    }})
+})
 
 /*
  * Route to return a list of courses.
@@ -111,10 +122,10 @@ router.get('/:assignmentId/submissions', async function (req, res, next) {
 /*
 * Route to post a submission for a specific assignment
 */
-router.post('/:assignmentId/submissions', requireAuthentication, async function (req, res, next) {
-  const user = await User.findByPk(req.user)
+router.post('/:assignmentId/submissions', upload.single('file'), requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
   const studentId = user.id
-  if(req.user !== req.params.userId && (user.role != 'student' || user.role != 'admin')){
+  if(req.user !== req.params.userId && !(user.role == 'student' || user.role == 'admin')){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
@@ -123,8 +134,8 @@ router.post('/:assignmentId/submissions', requireAuthentication, async function 
     const assignmentId = req.params.assignmentId
     const assignment = await Assignment.findByPk(assignmentId)
     if (assignment) {
-      const submission = await Submission.create({studentId: studentId, assignmentId: assignmentId, grade: "NOT YET GRADED"})
-      res.status(201).send({ file: submission.file })
+      const submission = await Submission.create({studentId: studentId, assignmentId: assignmentId, grade: "NOT YET GRADED", file: `submissions/${assignmentId}/${studentId}+${this.id}`}, SubmissionClientFields)
+      res.status(201).send({ link: `/submissions/${submisison.id}` })
     }
     else {
       next()

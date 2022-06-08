@@ -1,13 +1,79 @@
 {
 	"info": {
-		"_postman_id": "7aa9bf48-c384-43b0-a87b-87b83f164343",
+		"_postman_id": "e6c56b9f-96cb-4e05-b101-7652629020b2",
 		"name": "Final Project",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20573984"
 	},
 	"item": [
 		{
 			"name": "Assignments",
 			"item": [
+				{
+					"name": "Submissions",
+					"item": [
+						{
+							"name": "Get Submissions By Assignment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/assignments/:id/submissions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"assignments",
+										":id",
+										"submissions"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Submission By Assignment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "file",
+									"file": {
+										"src": "/C:/Users/user/Desktop/final-project-final-project-team-20/tests/mock_file.txt"
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/assignments/:id/submissions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"assignments",
+										":id",
+										"submissions"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Get Assignment By Id",
 					"request": {
@@ -141,30 +207,109 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
 				{
-					"name": "Get Submissions By Assignment",
+					"name": "New Course",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"instructorId\": 2,\r\n    \"subject\": \"CS\",\r\n    \"number\": 312,\r\n    \"title\": \"System Administration\",\r\n    \"term\": \"sp22\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8000/assignments/:id/submissions",
+							"raw": "http://localhost:8000/courses/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
-								"assignments",
-								":id",
-								"submissions"
+								"courses",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/courses/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"courses",
+								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "11"
 								}
 							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Course",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"assignmentId\": \"2\",\r\n    \"studentId\": \"9\",\r\n    \"grade\": \"67\",\r\n    \"file\": \"submissions/1/STUDENTID+SUBMISSIONINDEX\",\r\n    \"timestamp\": \"2022-05-02T06:58:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/courses/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"courses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
 						}
 					},
 					"response": []
@@ -398,109 +543,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Courses",
-			"item": [
-				{
-					"name": "New Course",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"instructorId\": 2,\r\n    \"subject\": \"CS\",\r\n    \"number\": 312,\r\n    \"title\": \"System Administration\",\r\n    \"term\": \"sp22\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/courses/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"courses",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Course",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/courses/:id",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"courses",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "11"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Edit Course",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"assignmentId\": \"2\",\r\n    \"studentId\": \"9\",\r\n    \"grade\": \"67\",\r\n    \"file\": \"submissions/1/STUDENTID+SUBMISSIONINDEX\",\r\n    \"timestamp\": \"2022-05-02T06:58:00.000Z\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/courses/:id",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"courses",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "11"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Course By Id",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				}
-			]
 		}
 	],
 	"auth": {
@@ -508,7 +550,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaWNrQGJsb2NrMTUuY29tIiwiaWF0IjoxNjU0NjUzMDE2LCJleHAiOjE2NTQ3Mzk0MTZ9.62HJ48N6ZNX1GHqsKX1WXJSVN6jcX85kR2lVqXOvnSU",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaWNrQGJsb2NrMTUuY29tIiwiaWF0IjoxNjU0NzE0NjU2LCJleHAiOjE2NTQ4MDEwNTZ9.6wPOUPakfrVB95SIwT7Inccy_JLvUklez0uCTODdFY0",
 				"type": "string"
 			}
 		]
