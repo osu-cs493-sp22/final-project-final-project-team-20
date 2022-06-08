@@ -19,13 +19,13 @@ const router = Router()
 router.post('/', optionalAuthentication, async function (req,res, next){
 	
 	try {
-		if(req.body.admin){
+		if(req.body.role == 'admin' || req.body.role == 'instructor'){
 			if(req.allowed){
 				const user = await User.create(req.body, UserClientFields)
 				res.status(201).send({ id: user.id })
 			}else{
 				res.status(401).send({
-					err: "Invalid authentication token"
+					err: "Unauthorized to create this user"
 				})
 			}
 		}
