@@ -1,4 +1,6 @@
 services:
+  redis-server:
+    image: redis:latest
   db:
     image: mysql
     ports:
@@ -27,6 +29,8 @@ services:
     ports:
       - 8000:8000
     environment:
+      REDIS_HOST: final-project-final-project-team-20_redis-server_1
+      REDIS_PORT: 6379
       MYSQL_HOST: db
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -34,4 +38,5 @@ services:
     depends_on:
       - db
       - db-init
+      - redis-server
     restart: on-failure
