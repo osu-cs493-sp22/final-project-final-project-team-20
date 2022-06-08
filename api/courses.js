@@ -5,7 +5,8 @@ const { Course, CourseClientFields } = require('../models/course')
 const { User } = require('../models/user')
 const { Assignment } = require('../models/assignment')
 const { Submission } = require('../models/submission')
-
+const { Sequelize } = require('../lib/sequelize')
+const op = Sequelize.Op
 const router = Router()
 
 /*
@@ -133,7 +134,7 @@ router.delete('/:courseId', requireAuthentication, async function (req, res, nex
 })
 
 /*
- * Route to fetch info about a specific course.
+ * Route to fetch info about a specific course students.
  */
 router.get('/:courseId/students',requireAuthentication, async function (req, res, next) {
   const user = await User.findOne({where: {email: req.user}})
@@ -145,7 +146,11 @@ router.get('/:courseId/students',requireAuthentication, async function (req, res
     const courseId = req.params.courseId
     const course = await Course.findByPk(courseId)
     if (course) {
-      const students = await Course.findAndCountAll({where: {id: courseId}})
+      const assignments = await Assignment.findAll({where: {courseId: courseId}})
+      const assignmentIds = assignments.map(x => x.id) 
+      const submissions = await Submission.findAll({where: {assignmentId: { [op.in]: assignmentIds }}})
+      const studenIds = submissions.map(x => x.studentId) 
+      const students = await User.findAll({where: {id: { [op.in]: studenIds }}})
 
       res.status(200).send({
         students: students
