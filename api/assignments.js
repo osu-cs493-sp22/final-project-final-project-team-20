@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { ValidationError } = require('sequelize')
 const { requireAuthentication } = require('../lib/auth')
 const { Assignment, AssignmentClientFields } = require('../models/assignment')
-const { Submission } = require('../models/submission')
+const { Submission, SubmissionClientFields } = require('../models/submission')
 const { User } = require('../models/user')
 
 const router = Router()
@@ -105,6 +105,30 @@ router.get('/:assignmentId/submissions', async function (req, res, next) {
   }
   else {
     next()
+  }
+})
+
+/*
+* Route to post a submission for a specific assignment
+*/
+router.post('/:assignmentId/submissions', requireAuthentication, async function (req, res, next) {
+  const user = await User.findByPk(req.user)
+  const studentId = user.id
+  if(req.user !== req.params.userId && (user.role != 'student' || user.role != 'admin')){
+		res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+	}
+  else {
+    const assignmentId = req.params.assignmentId
+    const assignment = await Assignment.findByPk(assignmentId)
+    if (assignment) {
+      const submission = await Submission.create({studentId: studentId, assignmentId: assignmentId, grade: "NOT YET GRADED"})
+      res.status(201).send({ file: submission.file })
+    }
+    else {
+      next()
+    }
   }
 })
 

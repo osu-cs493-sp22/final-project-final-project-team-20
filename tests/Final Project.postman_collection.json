@@ -147,7 +147,26 @@
 					"name": "Get Submissions By Assignment",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/assignments/:id/submissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"assignments",
+								":id",
+								"submissions"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
 					},
 					"response": []
 				}
