@@ -64,7 +64,7 @@ router.post('/', requireAuthentication, async function (req, res, next) {
         })
 	}else{
 	  try {
-		const course = await Course.create(req.body, BusinessClientFields)
+		const course = await Course.create(req.body, CourseClientFields)
 		res.status(201).send({ id: course.id })
 	  } catch (e) {
 		if (e instanceof ValidationError) {
