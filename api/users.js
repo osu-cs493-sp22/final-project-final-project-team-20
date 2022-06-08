@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 //const { assignments } = require('../models/assignments')
 
 const { User, UserClientFields } = require('../models/user')
+const { Course } = require('../models/course')
 const { generateAuthToken, requireAuthentication, optionalAuthentication } = require("../lib/auth")
 const { ValidationError } = require('sequelize')
 
@@ -80,16 +81,37 @@ router.post('/login', async function (req, res, next){
 
 //Show user NO PASSWORD
 router.get('/:email', requireAuthentication, async function (req, res, next) {
-	const user = await User.findOne({where: {email: req.user}})
-	if(req.user !== req.params.email && user.role != 'admin'){
+	const currUser = await User.findOne({where: {email: req.user}})
+	if(req.user !== req.params.email && currUser.role != 'admin'){
 		res.status(403).send({
             err: "Unauthorized to access the specified resource"
         })
 	}else{
-		const email = req.params.email
-		const user = await User.findOne( {where: {email: req.params.email},
-			attributes: ['id', 'name', 'email', 'role']	
-		})
+		const user = await User.findOne({where: {email: req.params.email}})
+		if(user.role == 'instructor'){
+			console.log("===INSTRUCTOR")
+			const user = await User.findOne( {where: {email: req.params.email},
+				attributes: ['id', 'name', 'email', 'role']
+			})
+		}
+		else if( user.role == 'student'){
+			console.log("===STUDENT")
+			const user = await User.findOne( {where: {email: req.params.email},
+				attributes: ['id', 'name', 'email', 'role']	
+			})			
+		}
+		else if( user.role == 'admin'){
+			console.log("===ADMIN")
+			const user = await User.findOne( {where: {email: req.params.email},
+				attributes: ['id', 'name', 'email', 'role']	
+			})
+		}
+		else{
+			console.log("===BAD ROLE")
+			res.status(500).send({
+            err: "role unauthorized to have"
+			})
+		}
 		res.status(200).json({
 			users: user
 		})
