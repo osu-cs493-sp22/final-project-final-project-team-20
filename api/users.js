@@ -1,9 +1,6 @@
 const { Router } = require('express')
 const bcrypt = require('bcryptjs')
 
-//const { courses } = require('../models/courses')
-//const { assignments } = require('../models/assignments')
-
 const { User, UserClientFields } = require('../models/user')
 const { Course } = require('../models/course')
 const { generateAuthToken, requireAuthentication, optionalAuthentication } = require("../lib/auth")
@@ -140,4 +137,62 @@ router.get('/:email', requireAuthentication, async function (req, res, next) {
 		}
 	}
 })
+
+//Show user NO PASSWORD via id
+// router.get('/:id', requireAuthentication, async function (req, res, next) {
+// 	const currUser = await User.findOne({where: {email: req.user}})
+// 	if(req.user !== req.params.email && currUser.id != req.params.id){
+// 		res.status(403).send({
+//             err: "Unauthorized to access the specified resource"
+//         })
+// 	}else{
+// 		if(currUser.role == 'instructor'){
+// 			console.log("===INSTRUCTOR")
+			
+// 			const retUser = await User.findOne( {where: {email: currUser.email},
+// 				attributes: ['id', 'name', 'email', 'role'],
+// 				include: [
+// 					{
+// 						model: Course,
+// 						where: {instructorId: currUser.id}
+// 					}
+// 				]
+// 			})
+// 			res.status(200).json({
+// 				user: retUser
+// 			})
+// 		}
+// 		else if( currUser.role == 'student'){
+// 			console.log("===STUDENT")
+// 			const submissions = await Submission.findAll({where: {studentId: currUser.id}})
+// 			const assignmentIds = submissions.map(x => x.assignmentId) 
+// 			const assignments = await Assignment.findAll({where: {id: { [op.in]: assignmentIds }}})
+// 			const courseIds = assignments.map(x => x.courseId)
+// 			const courses = await Course.findAll({where: {id: {[op.in]: courseIds}}})
+// 			const retUser = await User.findOne( {where: {email: currUser.email},
+// 				attributes: ['id', 'name', 'email', 'role']
+// 			})
+// 			retUser.setDataValue('courses', courses)
+// 			res.status(200).json({
+// 				user: retUser
+// 			})
+// 		}
+// 		else if( currUser.role == 'admin'){
+// 			console.log("===ADMIN")
+// 			const retUser = await User.findOne( {where: {email: currUser.email},
+// 				attributes: ['id', 'name', 'email', 'role']	
+// 			})
+// 			res.status(200).json({
+// 				user: retUser
+// 			})
+// 		}
+// 		else{
+// 			console.log("===BAD ROLE")
+// 			res.status(500).send({
+//             err: "role unauthorized to have"
+// 			})
+// 		}
+// 	}
+// })
+
 module.exports = router
