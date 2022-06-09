@@ -6,7 +6,7 @@ const { User } = require('../models/user')
 const { Assignment } = require('../models/assignment')
 const { Submission } = require('../models/submission')
 const { Sequelize } = require('../lib/sequelize')
-const {Parser} = require('json2csv');
+const { Parser } = require('json2csv');
 const op = Sequelize.Op
 const router = Router()
 
