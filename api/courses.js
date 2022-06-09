@@ -6,6 +6,7 @@ const { User } = require('../models/user')
 const { Assignment } = require('../models/assignment')
 const { Submission } = require('../models/submission')
 const { Sequelize } = require('../lib/sequelize')
+const { Parser } = require('json2csv');
 const op = Sequelize.Op
 const router = Router()
 
@@ -134,6 +135,47 @@ router.delete('/:courseId', requireAuthentication, async function (req, res, nex
 })
 
 /*
+ * Route to fetch info about a specific course roster.
+ */
+router.get('/:courseId/roster',requireAuthentication, async function (req, res, next) {
+  const user = await User.findOne({where: {email: req.user}})
+  if(req.user !== req.params.userId && user.role != 'admin'){
+    res.status(403).send({
+            err: "Unauthorized to access the specified resource"
+        })
+  }else{
+    const courseId = req.params.courseId
+    const course = await Course.findByPk(courseId)
+    if (course) {
+      const fields = [{
+        label: 'StudentID',
+        value: 'id'
+      }, {
+        label: 'Name',
+        value: 'name'
+      }, {
+        label: 'Email',
+        value: 'email'
+      }];
+      const assignments = await Assignment.findAll({where: {courseId: courseId}})
+      const assignmentIds = assignments.map(x => x.id)
+      const submissions = await Submission.findAll({where: {assignmentId: { [op.in]: assignmentIds }}})
+      const studenIds = submissions.map(x => x.studentId)
+      const students = await User.findAll({where: {id: { [op.in]: studenIds }}})
+
+      const parser = new Parser({fields});
+      const csv = parser.parse(students);
+
+      res.set('Content-Type', 'text/csv');
+      res.status(200).send(csv);
+
+    } else {
+    next()
+    }
+  }
+})
+
+/*
  * Route to fetch info about a specific course students.
  */
 router.get('/:courseId/students',requireAuthentication, async function (req, res, next) {
@@ -147,14 +189,14 @@ router.get('/:courseId/students',requireAuthentication, async function (req, res
     const course = await Course.findByPk(courseId)
     if (course) {
       const assignments = await Assignment.findAll({where: {courseId: courseId}})
-      const assignmentIds = assignments.map(x => x.id) 
+      const assignmentIds = assignments.map(x => x.id)
       const submissions = await Submission.findAll({where: {assignmentId: { [op.in]: assignmentIds }}})
-      const studenIds = submissions.map(x => x.studentId) 
+      const studenIds = submissions.map(x => x.studentId)
       const students = await User.findAll({where: {id: { [op.in]: studenIds }}})
 
       res.status(200).send({
         students: students
-      });  
+      });
     } else {
     next()
     }
@@ -178,7 +220,7 @@ router.get('/:courseId/assignments',requireAuthentication, async function (req, 
 
       res.status(200).send({
         assignments: assignments
-      });  
+      });
     } else {
     next()
     }
